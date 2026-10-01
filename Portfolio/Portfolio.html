@@ -563,17 +563,19 @@
                         </div>
                     </div>
                     <form class="contact-form" id="contact-form">
+                        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px" />
                         <div class="form-group">
-                            <input type="text" placeholder="Your Name" required>
+                            <input type="text" name="name" placeholder="Your Name" maxlength="100" autocomplete="name" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" placeholder="Your Email" required>
+                            <input type="email" name="email" placeholder="Your Email" maxlength="254" autocomplete="email" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" placeholder="Subject" required>
+                            <input type="text" name="subject" placeholder="Subject" maxlength="160" required>
                         </div>
                         <div class="form-group">
-                            <textarea placeholder="Your Message" rows="5" required></textarea>
+                            <textarea name="message" placeholder="Your Message" rows="5" maxlength="5000" required></textarea>
+                        <p id="contact-status" role="status" aria-live="polite"></p>
                         </div>
                         <button type="submit" class="btn-primary">
                             <i class="fas fa-paper-plane"></i> Send Message
