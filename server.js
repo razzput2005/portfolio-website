@@ -128,6 +128,7 @@ app.delete("/api/admin/projects/:id", requireAdmin, async (req, res, next) => {
 });
 
 app.use(express.static(path.join(ROOT, "Portfolio")));
+app.get("/", (_req, res) => res.sendFile(path.join(ROOT, "Portfolio", "Portfolio.html")));
 app.get("/admin", (_req, res) => res.sendFile(path.join(ROOT, "Portfolio", "admin.html")));
 app.use((error, _req, res, _next) => {
   console.error(error);
