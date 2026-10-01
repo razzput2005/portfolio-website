@@ -1,0 +1,51 @@
+[
+  {
+    "id": "bakery-site",
+    "title": "Bakery Website",
+    "description": "A responsive bakery website with a modern interface and clear visual hierarchy.",
+    "category": "html responsive",
+    "badge": "HTML/CSS",
+    "technologies": [
+      "HTML5",
+      "CSS3",
+      "Responsive"
+    ],
+    "date": "Jan 2024",
+    "image": "./Profileimg/Project1.png",
+    "demo": "#",
+    "code": "https://github.com/razzput2005"
+  },
+  {
+    "id": "foodie-app",
+    "title": "Foodie Website",
+    "description": "A food-focused website featuring dynamic content and a responsive layout.",
+    "category": "html js responsive",
+    "badge": "JavaScript",
+    "technologies": [
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "date": "2025",
+    "image": "./Profileimg/Project2.png",
+    "demo": "https://github.com/razzput2005/foodie",
+    "code": "https://github.com/razzput2005/foodie"
+  },
+  {
+    "id": "portfolio",
+    "title": "Personal Portfolio",
+    "description": "A personal portfolio showcasing frontend projects, skills, and contact details.",
+    "category": "html js responsive",
+    "badge": "Full Stack",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Node.js"
+    ],
+    "date": "2026",
+    "image": "./Profileimg/Project3.png",
+    "demo": "#",
+    "code": "https://github.com/razzput2005/portfolio-website"
+  }
+]
