@@ -736,7 +736,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ===== 17. FORM VALIDATION ENHANCEMENT =====
-const contactForm = document.getElementById('contact-form');
+
 if (contactForm) {
     const inputs = contactForm.querySelectorAll('input, textarea');
     
