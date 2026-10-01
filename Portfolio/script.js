@@ -397,35 +397,99 @@ chatInput.addEventListener("keypress", e => {
     }
 });
 
-// ===== 12. CONTACT FORM =====
-document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form values
-    const formData = {
-        name: this.querySelector('input[type="text"]').value,
-        email: this.querySelector('input[type="email"]').value,
-        subject: this.querySelector('input[placeholder="Subject"]').value,
-        message: this.querySelector('textarea').value
-    };
-    
-    // Simple validation
-    if (!formData.name || !formData.email || !formData.message) {
-        showNotification('Please fill in all required fields', 'error');
-        return;
+// ===== 12. CONTACT FORM (Express API) =====
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const status = document.getElementById('contact-status');
+        const formData = Object.fromEntries(new FormData(this).entries());
+        if (status) status.textContent = 'Sending message...';
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Unable to send your message.');
+            this.reset();
+            if (status) status.textContent = result.message;
+            showNotification(result.message, 'success');
+        } catch (error) {
+            if (status) status.textContent = error.message || 'Could not reach the server. Please try again.';
+            showNotification(error.message || 'Message could not be sent.', 'error');
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+}
+
+// Fetch and render projects from the Express API; keep existing cards as a graceful fallback.
+async function loadDynamicProjects() {
+    const grid = document.querySelector('.projects-grid');
+    if (!grid) return;
+    try {
+        const response = await fetch('/api/projects');
+        if (!response.ok) return;
+        const projects = await response.json();
+        if (!Array.isArray(projects)) return;
+        grid.replaceChildren();
+        projects.forEach(project => {
+            const card = document.createElement('article');
+            card.className = 'project-card';
+            card.dataset.category = project.category || 'all';
+            const image = document.createElement('img');
+            image.src = project.image || './Profileimg/Project1.png';
+            image.alt = project.title || 'Portfolio project';
+            const imageWrap = document.createElement('div');
+            imageWrap.className = 'project-image';
+            imageWrap.append(image);
+            const badge = document.createElement('span');
+            badge.className = 'project-badge';
+            badge.textContent = project.badge || 'Project';
+            imageWrap.append(badge);
+            const content = document.createElement('div');
+            content.className = 'project-content';
+            const title = document.createElement('h3');
+            title.textContent = project.title || 'Untitled project';
+            const description = document.createElement('p');
+            description.textContent = project.description || '';
+            const tech = document.createElement('div');
+            tech.className = 'project-tech';
+            (Array.isArray(project.technologies) ? project.technologies : []).forEach(name => {
+                const tag = document.createElement('span');
+                tag.textContent = name;
+                tech.append(tag);
+            });
+            const meta = document.createElement('div');
+            meta.className = 'project-meta';
+            meta.append(tech);
+            const date = document.createElement('span');
+            date.className = 'project-date';
+            date.textContent = project.date || '';
+            meta.append(date);
+            const links = document.createElement('div');
+            links.className = 'project-links';
+            [['Live Demo', project.demo], ['Code', project.code]].forEach(([label, url]) => {
+                const a = document.createElement('a');
+                a.className = label === 'Code' ? 'btn-secondary' : 'btn-primary';
+                a.href = url || '#';
+                a.textContent = label;
+                if (/^https:\/\//i.test(a.href)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+                links.append(a);
+            });
+            content.append(title, description, meta, links);
+            card.append(imageWrap, content);
+            grid.append(card);
+        });
+    } catch (error) {
+        console.info('Projects API unavailable; showing bundled portfolio cards.', error);
     }
-    
-    // Simulate form submission
-    showNotification('Sending message...', 'info');
-    
-    setTimeout(() => {
-        showNotification('Thank you for your message! I will get back to you soon.', 'success');
-        this.reset();
-        
-        // Log form data (in real app, this would go to a server)
-        console.log('Form submitted:', formData);
-    }, 1500);
-});
+}
+loadDynamicProjects();
 
 function showNotification(message, type = 'info') {
     // Remove existing notification
